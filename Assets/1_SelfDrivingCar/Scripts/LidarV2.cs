@@ -79,16 +79,18 @@ public class LidarV2 : MonoBehaviour
 		frameRenderCounter = 0;
 		frameActualRenderTimes = 0;
 		Render(ref nextImage, ref nextStartColumns, ref sampleCount);
-		
-		while (sampleCount > 0) {
-			nextImage.Apply();
-			lastImage = nextImage;
-			rawImage.texture = lastImage;
-			nextImage = new Texture2D(CloudWidth, Channels, TextureFormat.RGB24, false);
-			Render(ref nextImage, ref nextStartColumns, ref sampleCount);
-		}
 
-		Debug.LogFormat("DeltaTime:{0}, RenderTimes:{1}, ActualRenderTiems:{2}", Time.deltaTime, frameRenderCounter, frameActualRenderTimes);
+        try {
+            while (sampleCount > 0) {
+			    nextImage.Apply();
+			    lastImage = nextImage;
+			    rawImage.texture = lastImage;
+			    nextImage = new Texture2D(CloudWidth, Channels, TextureFormat.RGB24, false);
+			    Render(ref nextImage, ref nextStartColumns, ref sampleCount);
+		    }
+        } catch (System.Exception e) { }
+
+        Debug.LogFormat("DeltaTime:{0}, RenderTimes:{1}, ActualRenderTiems:{2}", Time.deltaTime, frameRenderCounter, frameActualRenderTimes);
 	}
 
 	// return successfully rendered fragment width
